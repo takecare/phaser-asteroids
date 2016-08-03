@@ -48,6 +48,9 @@ gameState.prototype = {
                                       graphicAssets.ship.name);
     this.shipSprite.angle = -90; // rotate 90d cw
     this.shipSprite.anchor.set(0.5, 0.5); // translate the sprite anchor point to its center
+  },
+  initPhysics: function() {
+    
   }
 }
 
