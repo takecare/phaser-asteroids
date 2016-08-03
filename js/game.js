@@ -18,6 +18,10 @@ var graphicAssets = {
 var shipProperties = {
     startX: gameProperties.screenWidth / 2,
     startY: gameProperties.screenHeight / 2,
+    acceleration: 300,
+    friction: 100,
+    maxVelocity: 300,
+    angularVelocity: 200
 };
 
 var gameState = function (game) {
