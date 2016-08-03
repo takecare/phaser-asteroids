@@ -43,6 +43,7 @@ gameState.prototype = {
 
   },
   initGraphics: function () {
+    // GameObjectFactory sprite(x, y, key, frame, group)
     this.shipSprite = game.add.sprite(shipProperties.startX,
                                       shipProperties.startY,
                                       graphicAssets.ship.name);
@@ -50,7 +51,8 @@ gameState.prototype = {
     this.shipSprite.anchor.set(0.5, 0.5); // translate the sprite anchor point to its center
   },
   initPhysics: function() {
-    
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.physics.arcade.enable(shipSprite)
   }
 }
 
