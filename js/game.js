@@ -30,23 +30,28 @@ var gameState = function (game) {
 
 gameState.prototype = {
   preload: function () {
+    // game.load -> Loader class
     game.load.image(graphicAssets.asteroidLarge.name, graphicAssets.asteroidLarge.URL);
     game.load.image(graphicAssets.asteroidMedium.name, graphicAssets.asteroidMedium.URL);
     game.load.image(graphicAssets.asteroidSmall.name, graphicAssets.asteroidSmall.URL);
     game.load.image(graphicAssets.bullet.name, graphicAssets.bullet.URL);
-    game.load.image(graphicAssets.ship.name, graphicAssets.ship.URL);
+
+    // Loader class. method: spritesheet(key, url, frameWidth, frameHeight, frameMax, margin, spacing)
+    game.load.spritesheet(graphicAssets.ship.name, graphicAssets.ship.URL, 22, 15); // TODO move dimens to obj
   },
   create: function() {
     this.initGraphics();
   },
   update: function() {
-
+    // TODO ...
   },
   initGraphics: function () {
-    // GameObjectFactory sprite(x, y, key, frame, group)
+    // GameObjectFactory class. method: sprite(x, y, key, frame, group)
     this.shipSprite = game.add.sprite(shipProperties.startX,
                                       shipProperties.startY,
                                       graphicAssets.ship.name);
+    // AnimationManager class. method: add(name, frames, frameRate, loop, useNumericIndex)
+    this.shipSprite.animations.add('moving', [0, 1], 10, true, false);
     this.shipSprite.angle = -90; // rotate 90d cw
     this.shipSprite.anchor.set(0.5, 0.5); // translate the sprite anchor point to its center
   },
