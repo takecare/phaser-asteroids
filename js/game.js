@@ -56,13 +56,13 @@ gameState.prototype = {
                                       shipProperties.startY,
                                       graphicAssets.ship.name);
     // AnimationManager class. method: add(name, frames, frameRate, loop, useNumericIndex)
-    this.shipSprite.animations.add('moving', [0, 1], 10, true, false);
+    this.shipSprite.animations.add('moving', [1], 10, true, true);
     this.shipSprite.angle = -90; // rotate 90d cw
     this.shipSprite.anchor.set(0.5, 0.5); // translate the sprite anchor point to its center
   },
   initPhysics: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.physics.arcade.enable(this.shipSprite)
+    game.physics.arcade.enable(this.shipSprite);
   },
   initKeyboard: function() {
     // game.input -> Input class. input.keyboard -> Keyboard class
@@ -72,7 +72,12 @@ gameState.prototype = {
     this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
   },
   pollKeyboard: function() {
-    // TODO
+    if (this.key_thrust.isDown) {
+      this.shipSprite.body.acceleration.y -= 10;
+      this.shipSprite.animations.play('moving');
+    } else {
+      this.shipSprite.animations.stop('moving')
+    }
   }
 }
 
