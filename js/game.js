@@ -63,6 +63,7 @@ gameState.prototype = {
   initPhysics: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.enable(this.shipSprite);
+    this.shipSprite.body.collideWorldBounds = true;
   },
   initKeyboard: function() {
     // game.input -> Input class. input.keyboard -> Keyboard class
@@ -94,8 +95,8 @@ gameState.prototype = {
                                                    this.shipSprite.body.acceleration);
       this.shipSprite.animations.play('moving');
     } else {
-      this.shipSprite.body.acceleration.y = 0;
       this.shipSprite.animations.stop('moving');
+      this.shipSprite.body.acceleration.set(0);
     }
   }
 }
