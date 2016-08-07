@@ -19,7 +19,7 @@ var shipProperties = {
     startX: gameProperties.screenWidth / 2,
     startY: gameProperties.screenHeight / 2,
     acceleration: 300,
-    friction: 100,
+    friction: 200,
     maxVelocity: 300,
     angularVelocity: 200
 };
@@ -56,13 +56,15 @@ gameState.prototype = {
                                       shipProperties.startY,
                                       graphicAssets.ship.name);
     // AnimationManager class. method: add(name, frames, frameRate, loop, useNumericIndex)
-    this.shipSprite.animations.add('moving', [1], 10, true, true);
+    this.shipSprite.animations.add('moving', [1], 10, true);
     this.shipSprite.angle = -90; // rotate 90d cw
     this.shipSprite.anchor.set(0.5, 0.5); // translate the sprite anchor point to its center
   },
   initPhysics: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.physics.arcade.enable(this.shipSprite);
+    this.shipSprite.body.drag.set(shipProperties.friction);
+    this.shipSprite.body.maxVelocity.set(shipProperties.maxVelocity);
     this.shipSprite.body.collideWorldBounds = true;
   },
   initKeyboard: function() {
@@ -74,17 +76,11 @@ gameState.prototype = {
   },
   pollKeyboard: function() {
     if (this.key_left.isDown) {
-      this.shipSprite.body.angularVelocity -= 10;
+      this.shipSprite.body.angularVelocity = -shipProperties.angularVelocity;
     } else if (this.key_right.isDown) {
-      this.shipSprite.body.angularVelocity += 10;
+      this.shipSprite.body.angularVelocity = shipProperties.angularVelocity;
     } else {
       this.shipSprite.body.angularVelocity = 0;
-    }
-
-    if (this.shipSprite.body.angularVelocity > 50) {
-      this.shipSprite.body.angularVelocity = 50;
-    } else if (this.shipSprite.body.angularVelocity < -50) {
-      this.shipSprite.body.angularVelocity = -50;
     }
 
     if (this.key_thrust.isDown) {
@@ -95,7 +91,7 @@ gameState.prototype = {
                                                    this.shipSprite.body.acceleration);
       this.shipSprite.animations.play('moving');
     } else {
-      this.shipSprite.animations.stop('moving');
+      this.shipSprite.animations.stop('moving', 0);
       this.shipSprite.body.acceleration.set(0);
     }
   }
