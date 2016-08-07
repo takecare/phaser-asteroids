@@ -26,6 +26,9 @@ var shipProperties = {
 
 var gameState = function (game) {
   this.shipSprite;
+  this.key_left;
+  this.key_right;
+  this.key_thrust;
 };
 
 gameState.prototype = {
@@ -42,9 +45,10 @@ gameState.prototype = {
   create: function() {
     this.initGraphics();
     this.initPhysics();
+    this.initKeyboard();
   },
   update: function() {
-    // TODO ...
+    this.pollKeyboard();
   },
   initGraphics: function () {
     // GameObjectFactory class. method: sprite(x, y, key, frame, group)
@@ -58,7 +62,17 @@ gameState.prototype = {
   },
   initPhysics: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.physics.arcade.enable(shipSprite)
+    game.physics.arcade.enable(this.shipSprite)
+  },
+  initKeyboard: function() {
+    // game.input -> Input class. input.keyboard -> Keyboard class
+    // addKey(keycode), returns Key object
+    this.key_left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    this.key_right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+  },
+  pollKeyboard: function() {
+    // TODO
   }
 }
 
