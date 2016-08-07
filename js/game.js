@@ -72,11 +72,30 @@ gameState.prototype = {
     this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
   },
   pollKeyboard: function() {
+    if (this.key_left.isDown) {
+      this.shipSprite.body.angularVelocity -= 10;
+    } else if (this.key_right.isDown) {
+      this.shipSprite.body.angularVelocity += 10;
+    } else {
+      this.shipSprite.body.angularVelocity = 0;
+    }
+
+    if (this.shipSprite.body.angularVelocity > 50) {
+      this.shipSprite.body.angularVelocity = 50;
+    } else if (this.shipSprite.body.angularVelocity < -50) {
+      this.shipSprite.body.angularVelocity = -50;
+    }
+
     if (this.key_thrust.isDown) {
-      this.shipSprite.body.acceleration.y -= 10;
+      // Physics.Arcade class
+      // accelerationFromRotation(rotation, speed, point)
+      game.physics.arcade.accelerationFromRotation(this.shipSprite.rotation,
+                                                   shipProperties.acceleration,
+                                                   this.shipSprite.body.acceleration);
       this.shipSprite.animations.play('moving');
     } else {
-      this.shipSprite.animations.stop('moving')
+      this.shipSprite.body.acceleration.y = 0;
+      this.shipSprite.animations.stop('moving');
     }
   }
 }
