@@ -49,6 +49,16 @@ gameState.prototype = {
   },
   update: function() {
     this.pollKeyboard();
+
+    isMoving = function(body) {
+      return body
+        && (Math.abs(body.velocity.x) > 0 || Math.abs(body.velocity.y > 0))
+    }
+
+    if (!isMoving(this.shipSprite.body)) {
+      this.shipSprite.animations.stop('moving', 0);
+      this.shipSprite.animations.getAnimation('moving').frame = 0;
+    }
   },
   initGraphics: function () {
     // GameObjectFactory class. method: sprite(x, y, key, frame, group)
@@ -56,7 +66,7 @@ gameState.prototype = {
                                       shipProperties.startY,
                                       graphicAssets.ship.name);
     // AnimationManager class. method: add(name, frames, frameRate, loop, useNumericIndex)
-    this.shipSprite.animations.add('moving', [1], 10, true);
+    this.shipSprite.animations.add('moving', [0, 1], 10, true);
     this.shipSprite.angle = -90; // rotate 90d cw
     this.shipSprite.anchor.set(0.5, 0.5); // translate the sprite anchor point to its center
   },
@@ -91,7 +101,6 @@ gameState.prototype = {
                                                    this.shipSprite.body.acceleration);
       this.shipSprite.animations.play('moving');
     } else {
-      this.shipSprite.animations.stop('moving', 0);
       this.shipSprite.body.acceleration.set(0);
     }
   }
