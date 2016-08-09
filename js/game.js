@@ -59,6 +59,9 @@ gameState.prototype = {
       this.shipSprite.animations.stop('moving', 0);
       this.shipSprite.animations.getAnimation('moving').frame = 0;
     }
+
+    this.checkBoundaries(this.shipSprite.body);
+    console.log(this.shipSprite.body.x+','+this.shipSprite.body.y+' vs '+game.width+','+game.height);
   },
   initGraphics: function () {
     // GameObjectFactory class. method: sprite(x, y, key, frame, group)
@@ -75,7 +78,6 @@ gameState.prototype = {
     game.physics.arcade.enable(this.shipSprite);
     this.shipSprite.body.drag.set(shipProperties.friction);
     this.shipSprite.body.maxVelocity.set(shipProperties.maxVelocity);
-    this.shipSprite.body.collideWorldBounds = true;
   },
   initKeyboard: function() {
     // game.input -> Input class. input.keyboard -> Keyboard class
@@ -102,6 +104,18 @@ gameState.prototype = {
       this.shipSprite.animations.play('moving');
     } else {
       this.shipSprite.body.acceleration.set(0);
+    }
+  },
+  checkBoundaries: function(body) {
+    if (body.x > game.width) {
+      body.x = 0;
+    } else if (body.x < 0) {
+      body.x = game.width;
+    }
+    if (body.y > game.height) {
+      body.y = 0;
+    } else if (body.y < 0) {
+      body.y = game.height;
     }
   }
 }
