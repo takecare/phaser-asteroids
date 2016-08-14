@@ -16,12 +16,19 @@ var graphicAssets = {
 };
 
 var shipProperties = {
-    startX: gameProperties.screenWidth / 2,
-    startY: gameProperties.screenHeight / 2,
-    acceleration: 300,
-    friction: 200,
-    maxVelocity: 300,
-    angularVelocity: 200
+  startX: gameProperties.screenWidth / 2,
+  startY: gameProperties.screenHeight / 2,
+  acceleration: 300,
+  friction: 200,
+  maxVelocity: 300,
+  angularVelocity: 200
+};
+
+var bulletProperties = {
+  speed: 400,
+  interval: 250,
+  lifespan: 2000,
+  maxCount: 30
 };
 
 var gameState = function (game) {
@@ -29,6 +36,10 @@ var gameState = function (game) {
   this.key_left;
   this.key_right;
   this.key_thrust;
+  this.key_fire;
+
+  this.bulletGroup;
+  this.buletInterval = 0;
 };
 
 gameState.prototype = {
@@ -72,6 +83,9 @@ gameState.prototype = {
     this.shipSprite.animations.add('moving', [0, 1], 10, true);
     this.shipSprite.angle = -90; // rotate 90d cw
     this.shipSprite.anchor.set(0.5, 0.5); // translate the sprite anchor point to its center
+
+    // GameObjectFactory class. method: group(parent, name, addToStage, enableBody, physicsBodyType)
+    this.bulletGroup = game.add.group();
   },
   initPhysics: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
