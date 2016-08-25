@@ -25,7 +25,7 @@ var shipProperties = {
 };
 
 var bulletProperties = {
-  speed: 400,
+  velocity: 400,
   interval: 250,
   lifespan: 2000,
   maxCount: 30
@@ -39,7 +39,7 @@ var gameState = function (game) {
   this.key_fire;
 
   this.bulletGroup;
-  this.buletInterval = 0;
+  this.bulletLastFired = 0;
 };
 
 gameState.prototype = {
@@ -72,9 +72,9 @@ gameState.prototype = {
     }
 
     this.checkBoundaries(this.shipSprite.body);
-    console.log(this.shipSprite.body.x+','+this.shipSprite.body.y+' vs '+game.width+','+game.height);
+    this.bulletGroup.forEachExists(this.checkBoundaries, this);
   },
-  initGraphics: function () {
+  initGraphics: function() {
     // GameObjectFactory class. method: sprite(x, y, key, frame, group)
     this.shipSprite = game.add.sprite(shipProperties.startX,
                                       shipProperties.startY,
@@ -86,12 +86,20 @@ gameState.prototype = {
 
     // GameObjectFactory class. method: group(parent, name, addToStage, enableBody, physicsBodyType)
     this.bulletGroup = game.add.group();
+    this.bulletGroup.createMultiple(bulletProperties.maxCount, graphicAssets.bullet.name);
+    this.bulletGroup.setAll('anchor.x', 0.5);
+    this.bulletGroup.setAll('anchor.y', 0.5);
+    this.bulletGroup.setAll('lifespan', bulletProperties.lifespan);
   },
   initPhysics: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
+
     game.physics.arcade.enable(this.shipSprite);
     this.shipSprite.body.drag.set(shipProperties.friction);
     this.shipSprite.body.maxVelocity.set(shipProperties.maxVelocity);
+
+    game.physics.arcade.enable(this.bulletGroup);
+    this.bulletGroup.physicsBodyType = Phaser.Physics.ARCADE;
   },
   initKeyboard: function() {
     // game.input -> Input class. input.keyboard -> Keyboard class
@@ -99,6 +107,7 @@ gameState.prototype = {
     this.key_left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     this.key_right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    this.key_fire = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   },
   pollKeyboard: function() {
     if (this.key_left.isDown) {
@@ -119,6 +128,10 @@ gameState.prototype = {
     } else {
       this.shipSprite.body.acceleration.set(0);
     }
+
+    if (this.key_fire.isDown) {
+      this.fire();
+    }
   },
   checkBoundaries: function(body) {
     if (body.x > game.width) {
@@ -130,6 +143,25 @@ gameState.prototype = {
       body.y = 0;
     } else if (body.y < 0) {
       body.y = game.height;
+    }
+  },
+  fire: function() {
+    if (game.time.now > this.bulletLastFired + bulletProperties.interval) {
+      bullet = this.bulletGroup.getFirstExists(false);
+      if (bullet) {
+        length = this.shipSprite.width * 0.5;
+        x = this.shipSprite.x + (Math.cos(this.shipSprite.rotation) * length)
+        y = this.shipSprite.y + (Math.sin(this.shipSprite.rotation) * length)
+
+        bullet.reset(x, y);
+        bullet.lifespan = bulletProperties.lifespan;
+        bullet.rotation = this.shipSprite.rotation;
+
+        game.physics.arcade.velocityFromRotation(this.shipSprite.rotation,
+                                                 bulletProperties.velocity,
+                                                 bullet.body.velocity);
+        this.bulletLastFired = game.time.now;
+      }
     }
   }
 }
