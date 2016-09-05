@@ -10,9 +10,9 @@ var states = {
 var graphicAssets = {
   ship: {URL:'assets/ship.png', name:'ship', width: 22, height: 15},
   bullet: {URL:'assets/bullet.png', name:'bullet'},
-  asteroidLarge: {URL:'assets/asteroidLarge.png', name:'asteroidLarge'},
-  asteroidMedium: {URL:'assets/asteroidMedium.png', name:'asteroidMedium'},
-  asteroidSmall: {URL:'assets/asteroidSmall.png', name:'asteroidSmall'},
+  asteroidLarge: {URL:'assets/asteroidLarge.png', name:'large'},
+  asteroidMedium: {URL:'assets/asteroidMedium.png', name:'medium'},
+  asteroidSmall: {URL:'assets/asteroidSmall.png', name:'small'},
 };
 
 var shipProperties = {
@@ -69,6 +69,7 @@ gameState.prototype = {
     this.initGraphics();
     this.initPhysics();
     this.initKeyboard();
+    this.resetAsteroids();
   },
   update: function() {
     this.pollKeyboard();
@@ -117,6 +118,7 @@ gameState.prototype = {
 
     game.physics.arcade.enable(this.asteroidGroup);
     this.asteroidGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    this.asteroidGroup.enableBody = true;
   },
   initKeyboard: function() {
     // game.input -> Input class. input.keyboard -> Keyboard class
@@ -183,12 +185,25 @@ gameState.prototype = {
   },
   createAsteroid: function(x, y, sizeKey) { // key <=> index
     asteroid = this.asteroidGroup.create(x, y, sizeKey);
-    asteroid.anchor.set(0.5, 0.5);
-    asteroid.body.angularVelocity = game.rnd.integerInRange(asteroidProperties[size].minAngularVelocity, asteroidProperties[size].maxAngularVelocity);
-    let randomRotationAngle = game.math.degToRad(game.rnd.angle());
     let asteroidSize = asteroidProperties[sizeKey];
+    asteroid.anchor.set(0.5, 0.5);
+    asteroid.body.angularVelocity = game.rnd.integerInRange(asteroidSize.minAngularVelocity, asteroidSize.maxAngularVelocity);
+    let randomRotationAngle = game.math.degToRad(game.rnd.angle());
     let randomVelocity = game.rnd.integerInRange(asteroidSize.minVelocity, asteroidSize.maxVelocity);
     game.physics.arcade.velocityFromRotation(randomRotationAngle, randomVelocity, asteroid.body.velocity);
+  },
+  resetAsteroids: function() {
+    for (i=0; i<this.asteroidCount; i++) {
+      let side = Math.round(Math.random()), x, y;
+      if (side) {
+        x = Math.round(Math.random()) * gameProperties.screenWidth;
+        y = Math.random() * gameProperties.screenHeight;
+      } else {
+        x = Math.random() * gameProperties.screenWidth;
+        y = Math.round(Math.random()) * gameProperties.screenHeight;
+      }
+      this.createAsteroid(x, y, graphicAssets.asteroidLarge.name);
+    }
   }
 }
 
