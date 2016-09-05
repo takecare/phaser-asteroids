@@ -31,6 +31,15 @@ var bulletProperties = {
   maxCount: 30
 };
 
+var asteroidProperties = {
+  startingAsteroids: 4,
+  maxAsteroids: 20,
+  incrementAsteroids: 2,
+  large: { minVelocity: 50, maxVelocity: 150, minAngularVelocity: 0, maxAngularVelocity: 200, score: 20, next: nextSize: graphicAssets.asteroidMedium.name },
+  medium: { minVelocity: 50, maxVelocity: 200, minAngularVelocity: 0, maxAngularVelocity: 200, score: 50, next: nextSize: graphicAssets.asteroidSmall.name },
+  small: { minVelocity: 50, maxVelocity: 300, minAngularVelocity: 0, maxAngularVelocity: 200, score: 100 }
+}
+
 var gameState = function (game) {
   this.shipSprite;
   this.key_left;
