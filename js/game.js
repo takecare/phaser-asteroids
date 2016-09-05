@@ -35,8 +35,8 @@ var asteroidProperties = {
   startingAsteroids: 4,
   maxAsteroids: 20,
   incrementAsteroids: 2,
-  large: { minVelocity: 50, maxVelocity: 150, minAngularVelocity: 0, maxAngularVelocity: 200, score: 20, next: nextSize: graphicAssets.asteroidMedium.name },
-  medium: { minVelocity: 50, maxVelocity: 200, minAngularVelocity: 0, maxAngularVelocity: 200, score: 50, next: nextSize: graphicAssets.asteroidSmall.name },
+  large: { minVelocity: 50, maxVelocity: 150, minAngularVelocity: 0, maxAngularVelocity: 200, score: 20, next: graphicAssets.asteroidMedium.name },
+  medium: { minVelocity: 50, maxVelocity: 200, minAngularVelocity: 0, maxAngularVelocity: 200, score: 50, next: graphicAssets.asteroidSmall.name },
   small: { minVelocity: 50, maxVelocity: 300, minAngularVelocity: 0, maxAngularVelocity: 200, score: 100 }
 }
 
@@ -49,6 +49,9 @@ var gameState = function (game) {
 
   this.bulletGroup;
   this.bulletLastFired = 0;
+
+  this.asteroidGroup;
+  this.asteroidCount = asteroidProperties.startingAsteroids;
 };
 
 gameState.prototype = {
@@ -99,6 +102,8 @@ gameState.prototype = {
     this.bulletGroup.setAll('anchor.x', 0.5);
     this.bulletGroup.setAll('anchor.y', 0.5);
     this.bulletGroup.setAll('lifespan', bulletProperties.lifespan);
+
+    this.asteroidGroup = game.add.group();
   },
   initPhysics: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -109,6 +114,9 @@ gameState.prototype = {
 
     game.physics.arcade.enable(this.bulletGroup);
     this.bulletGroup.physicsBodyType = Phaser.Physics.ARCADE;
+
+    game.physics.arcade.enable(this.asteroidGroup);
+    this.asteroidGroup.physicsBodyType = Phaser.Physics.ARCADE;
   },
   initKeyboard: function() {
     // game.input -> Input class. input.keyboard -> Keyboard class
