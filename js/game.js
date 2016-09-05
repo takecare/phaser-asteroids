@@ -8,7 +8,7 @@ var states = {
 };
 
 var graphicAssets = {
-  ship: {URL:'assets/ship.png', name:'ship'},
+  ship: {URL:'assets/ship.png', name:'ship', width: 22, height: 15},
   bullet: {URL:'assets/bullet.png', name:'bullet'},
   asteroidLarge: {URL:'assets/asteroidLarge.png', name:'asteroidLarge'},
   asteroidMedium: {URL:'assets/asteroidMedium.png', name:'asteroidMedium'},
@@ -51,7 +51,7 @@ gameState.prototype = {
     game.load.image(graphicAssets.bullet.name, graphicAssets.bullet.URL);
 
     // Loader class. method: spritesheet(key, url, frameWidth, frameHeight, frameMax, margin, spacing)
-    game.load.spritesheet(graphicAssets.ship.name, graphicAssets.ship.URL, 22, 15); // TODO move dimens to obj
+    game.load.spritesheet(graphicAssets.ship.name, graphicAssets.ship.URL, graphicAssets.ship.width, graphicAssets.ship.height);
   },
   create: function() {
     this.initGraphics();
