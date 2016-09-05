@@ -86,6 +86,7 @@ gameState.prototype = {
 
     this.checkBoundaries(this.shipSprite.body);
     this.bulletGroup.forEachExists(this.checkBoundaries, this);
+    this.asteroidGroup.forEachExists(this.checkBoundaries, this);
   },
   initGraphics: function() {
     // GameObjectFactory class. method: sprite(x, y, key, frame, group)
