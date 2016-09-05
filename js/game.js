@@ -180,6 +180,15 @@ gameState.prototype = {
         this.bulletLastFired = game.time.now;
       }
     }
+  },
+  createAsteroid: function(x, y, sizeKey) { // key <=> index
+    asteroid = this.asteroidGroup.create(x, y, sizeKey);
+    asteroid.anchor.set(0.5, 0.5);
+    asteroid.body.angularVelocity = game.rnd.integerInRange(asteroidProperties[size].minAngularVelocity, asteroidProperties[size].maxAngularVelocity);
+    let randomRotationAngle = game.math.degToRad(game.rnd.angle());
+    let asteroidSize = asteroidProperties[sizeKey];
+    let randomVelocity = game.rnd.integerInRange(asteroidSize.minVelocity, asteroidSize.maxVelocity);
+    game.physics.arcade.velocityFromRotation(randomRotationAngle, randomVelocity, asteroid.body.velocity);
   }
 }
 
