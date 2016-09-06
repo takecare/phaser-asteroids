@@ -42,6 +42,10 @@ var asteroidProperties = {
   small: { minVelocity: 50, maxVelocity: 300, minAngularVelocity: 0, maxAngularVelocity: 200, score: 100 }
 }
 
+var fontAssets = {
+  counterStyle: {font: '20px Arial', fill: '#ffffff', align: 'center'}
+}
+
 var gameState = function (game) {
   this.shipSprite;
   this.key_left;
@@ -56,6 +60,7 @@ var gameState = function (game) {
   this.asteroidCount = asteroidProperties.startingAsteroids;
 
   this.lives = shipProperties.lives;
+  this.livesUi;
 };
 
 gameState.prototype = {
@@ -112,6 +117,8 @@ gameState.prototype = {
     this.bulletGroup.setAll('lifespan', bulletProperties.lifespan);
 
     this.asteroidGroup = game.add.group();
+
+    this.livesUi = game.add.text(10, 5, this.lives, fontAssets.counterStyle);
   },
   initPhysics: function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
