@@ -21,7 +21,9 @@ var shipProperties = {
   acceleration: 300,
   friction: 200,
   maxVelocity: 300,
-  angularVelocity: 200
+  angularVelocity: 200,
+  lives: 3,
+  respawnInvulnerability: 3, //sec
 };
 
 var bulletProperties = {
@@ -52,6 +54,8 @@ var gameState = function (game) {
 
   this.asteroidGroup;
   this.asteroidCount = asteroidProperties.startingAsteroids;
+
+  this.lives = shipProperties.lives;
 };
 
 gameState.prototype = {
