@@ -87,6 +87,8 @@ gameState.prototype = {
     this.checkBoundaries(this.shipSprite.body);
     this.bulletGroup.forEachExists(this.checkBoundaries, this);
     this.asteroidGroup.forEachExists(this.checkBoundaries, this);
+
+    game.physics.arcade.overlap(this.bulletGroup, this.asteroidGroup, this.collideWithAsteroid, null, this);
   },
   initGraphics: function() {
     // GameObjectFactory class. method: sprite(x, y, key, frame, group)
@@ -205,6 +207,10 @@ gameState.prototype = {
       }
       this.createAsteroid(x, y, graphicAssets.asteroidLarge.name);
     }
+  },
+  collideWithAsteroid: function(target, asteroid) {
+    target.kill();
+    asteroid.kill();
   }
 }
 
