@@ -99,6 +99,8 @@ gameState.prototype = {
 
     game.physics.arcade.overlap(this.bulletGroup, this.asteroidGroup, this.collideWithAsteroid, null, this);
     game.physics.arcade.overlap(this.shipSprite, this.asteroidGroup, this.collideWithAsteroid, null, this);
+
+    this.livesUi.text = this.lives;
   },
   initGraphics: function() {
     // GameObjectFactory class. method: sprite(x, y, key, frame, group)
@@ -223,6 +225,13 @@ gameState.prototype = {
   collideWithAsteroid: function(target, asteroid) {
     target.kill();
     asteroid.kill();
+    if (target.key == this.shipSprite.key) {
+      this.destroyShip();
+    }
+  },
+  destroyShip: function() {
+    this.lives =- 1;
+    this.shipSprite.reset(shipProperties.startX, shipProperties.startY)
   }
 }
 
