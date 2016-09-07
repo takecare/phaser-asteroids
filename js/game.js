@@ -223,15 +223,23 @@ gameState.prototype = {
     }
   },
   collideWithAsteroid: function(target, asteroid) {
-    target.kill();
     asteroid.kill();
+    target.kill();
     if (target.key == this.shipSprite.key) {
       this.destroyShip();
     }
   },
   destroyShip: function() {
-    this.lives =- 1;
-    this.shipSprite.reset(shipProperties.startX, shipProperties.startY)
+    this.lives = this.lives - 1;
+    if (this.lives) {
+      game.time.events.start();
+      let timer = game.time.events.add(
+        shipProperties.respawnInvulnerability * Phaser.Timer.SECOND,
+        function() { this.shipSprite.reset(shipProperties.startX, shipProperties.startY); },
+        this
+      );
+      game.time.events.start();
+    }
   }
 }
 
