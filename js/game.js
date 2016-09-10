@@ -37,9 +37,31 @@ var asteroidProperties = {
   startingAsteroids: 4,
   maxAsteroids: 20,
   incrementAsteroids: 2,
-  large: { minVelocity: 50, maxVelocity: 150, minAngularVelocity: 0, maxAngularVelocity: 200, score: 20, next: graphicAssets.asteroidMedium.name },
-  medium: { minVelocity: 50, maxVelocity: 200, minAngularVelocity: 0, maxAngularVelocity: 200, score: 50, next: graphicAssets.asteroidSmall.name },
-  small: { minVelocity: 50, maxVelocity: 300, minAngularVelocity: 0, maxAngularVelocity: 200, score: 100 }
+  large: {
+    minVelocity: 50,
+    maxVelocity: 150,
+    minAngularVelocity: 0,
+    maxAngularVelocity: 200,
+    score: 20,
+    next: graphicAssets.asteroidMedium.name,
+    pieces: 2,
+  },
+  medium: {
+    minVelocity: 50,
+    maxVelocity: 200,
+    minAngularVelocity: 0,
+    maxAngularVelocity: 200,
+    score: 50,
+    next: graphicAssets.asteroidSmall.name,
+    pieces: 2
+  },
+  small: {
+    minVelocity: 50,
+    maxVelocity: 300,
+    minAngularVelocity: 0,
+    maxAngularVelocity: 200,
+    score: 100
+  }
 }
 
 var fontAssets = {
@@ -228,6 +250,7 @@ gameState.prototype = {
     if (target.key == this.shipSprite.key) {
       this.destroyShip();
     }
+    this.splitAsteroid(asteroid);
   },
   destroyShip: function() {
     this.lives = this.lives - 1;
@@ -239,6 +262,17 @@ gameState.prototype = {
         this
       );
       game.time.events.start();
+    }
+  },
+  splitAsteroid: function(asteroid) {
+    let nextSize = asteroidProperties[asteroid.key].next;
+    if (nextSize) {
+      let pieces = asteroidProperties[asteroid.key].pieces
+                    ? asteroidProperties[asteroid.key].pieces
+                    : 1;
+      for (i=0; i<pieces; i++) {
+        this.createAsteroid(asteroid.x, asteroid.y, nextSize);
+      }
     }
   }
 }
